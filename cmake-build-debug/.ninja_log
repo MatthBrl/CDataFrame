@@ -1,0 +1,5 @@
+# ninja log v5
+12	96	7370689751834996	CMakeFiles/Cdataframe.dir/main.c.obj	b2365c80e1f7edff
+2	99	7370689751870026	CMakeFiles/Cdataframe.dir/cdataframe.c.obj	9ae83e0a02d61198
+7	144	7370689752320148	CMakeFiles/Cdataframe.dir/column.c.obj	acb0365c27d9b74c
+144	253	7370689753400388	libCdataframe.a	48f0aa49c9bb23f3
