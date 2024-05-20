@@ -23,32 +23,60 @@ CDATAFRAME *create_cdataframe();
 int is_editable(CDATAFRAME *cdf);
 
 /**
+ * @brief : Add all column given in parameter to the cdf
+ * @param1 : Pointer to the cdf
+ * @param2 : Pointer to an array of column
+ * @param3: number of column in the array
+*/
+void hard_fill(CDATAFRAME  *cdf, COLUMN  **columns, int nb_col);
+
+/**
+ * @brief : interactive way to fill the cdf
+ * @param1 : Pointer to the cdf
+ * @param2 : number of column
+ * @param3 : number of rows
+*/
+void dynamic_fill(CDATAFRAME  *cdf, int nb_col, int nb_rows);
+
+/**
  * @brief : Add a column to the cdf
  * @param1 : Pointer to the cdf
- * @param2: Pointer to a column
+ * @param2 : Pointer to a column
  * @return : 1 if successful, 0 otherwise
 */
 int add_col(CDATAFRAME *cdf, COLUMN *col);
 
 /**
- * @brief : delete a column at the index given
+ * @brief : Delete a column at the index given
  * @param1 : Pointer to the cdf
- * @param2: index of the column that need to be deleted
+ * @param2 : index of the column that need to be deleted
  * @return : 1 if successful, 0 otherwise
 */
 int del_col(CDATAFRAME *cdf, int index); // no check rn for index being in the dataframe
 
 /**
- * @brief : rename the column at the index given
+ * @brief : Rename the column at the index given
  * @param1 : Pointer to the cdf
- * @param2: index of the column
- * @param3: new name
+ * @param2 : index of the column
+ * @param3 : new name
 */
 void rename_col(CDATAFRAME *cdf, int index, char *title); // no check rn for index being in the dataframe
 
-int add_rows(CDATAFRAME *cdf, int row[]);////////////////////////////// not done
+/**
+ * @brief : Add a given row to the cdf
+ * @param1 : Pointer to the cdf
+ * @param2 :  row to add as an int array
+ * @param3 : new name
+*/
+int add_row(CDATAFRAME *cdf, int *row); // no check rn for index being in the dataframe
 
-int del_rows(CDATAFRAME *cdf, int index);///////////////////////// not done
+/**
+ * @brief : Remove a row at the index given
+ * @param1 : Pointer to the cdf
+ * @param2 :  index of the row to remove
+ * @param3 : new name
+*/
+int del_row(CDATAFRAME *cdf, int index); // no check rn for index being in the dataframe
 
 /**
  * @brief : Delete the cdf
@@ -63,35 +91,35 @@ void delete_cdataframe(CDATAFRAME **cdf);
 void print_cdataframe(CDATAFRAME *cdf);
 
 /**
- * @brief : print all rows between x and y (included)
+ * @brief : Print all rows between x and y (included)
  * @param1 : Pointer to the cdf
- * @param2: start row index
- * @param3: end row index
+ * @param2 : start row index
+ * @param3 : end row index
 */
 void print_only_rows(CDATAFRAME *cdf, int x, int y); // no check rn for x and y being in the dataframe
 
 /**
- * @brief : print all col between x and y (included)
+ * @brief : Print all col between x and y (included)
  * @param1 : Pointer to the cdf
- * @param2: start col index
- * @param3: end col index
+ * @param2 : start col index
+ * @param3 : end col index
 */
 void print_only_col(CDATAFRAME *cdf, int x, int y); // no check rn for x and y being in the dataframe
 
 /**
- * @brief : print number of row in the cdf
+ * @brief : Print number of row in the cdf
  * @param : Pointer to the cdf
 */
 void print_nb_rows(CDATAFRAME *cdf);
 
 /**
- * @brief : print number of colum in the cdf
+ * @brief : Print number of column in the cdf
  * @param : Pointer to the cdf
 */
 void print_nb_col(CDATAFRAME *cdf);
 
 /**
- * @brief : print name of all column
+ * @brief : Print name of all column
  * @param : Pointer to the cdf
 */
 void print_col_name(CDATAFRAME *cdf);

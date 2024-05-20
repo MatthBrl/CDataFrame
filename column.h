@@ -26,6 +26,13 @@ COLUMN *create_column(char *title);
 int insert_value(COLUMN *col, int value);
 
 /**
+ * @brief : Remove value at given index
+ * @param1 : Pointer to a column
+ * @param2 : Index of the value to remove
+*/
+void remove_value(COLUMN *col, int index);
+
+/**
  * @brief : Free allocated memory
  * @param : Pointer to a column
 */

@@ -41,6 +41,17 @@ int insert_value(COLUMN *col, int value) {
     return 1;
 }
 
+void remove_value(COLUMN *col, int index) {
+    // move each value up from the given index
+    for (int j = index; j < col -> log_size - 1; j++) {
+        col -> data[j] = col -> data[j + 1];
+    }
+
+    //set the last array to 0 because not used anymore
+    col -> data[col -> log_size - 1] = 0;
+    col -> log_size -= 1;
+}
+
 //delete a column
 void delete_column(COLUMN **col) {
     //free memory of the data of the column

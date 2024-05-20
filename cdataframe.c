@@ -47,7 +47,34 @@ void delete_cdataframe(CDATAFRAME **cdf) {
     *cdf = NULL;
 }
 
-//add a column to the cdataframe
+// Add all column given in parameter to the cdf
+void hard_fill(CDATAFRAME *cdf, COLUMN **columns, int nb_col) {
+    for (int i = 0; i < nb_col; i++) {
+        add_col(cdf, columns[i]);
+    }
+}
+
+// Interactive way to fill the cdf
+void dynamic_fill(CDATAFRAME *cdf, int nb_col, int nb_rows) {
+    for(int i = 0; i < nb_col; i++) {
+        char title;
+        printf("give a name to the column %d:", i);
+        scanf("%s", &title);
+        fflush(stdin);
+        COLUMN *column = create_column(&title);
+        for(int j = 0; j < nb_rows; j++) {
+            int val;
+
+            printf("Column %d value %d:", i, j);
+            scanf("%d", &val);
+            fflush(stdin);
+            insert_value(column, val);
+        }
+        add_col(cdf, column);
+    }
+}
+
+// Add a column to the cdataframe
 int add_col(CDATAFRAME *cdf, COLUMN *col) {
     //if cdataframe is deleted
     if(cdf == NULL) {
@@ -68,7 +95,7 @@ int add_col(CDATAFRAME *cdf, COLUMN *col) {
     cdf -> columns = new_data;
     cdf -> columns[cdf -> nb_col++] = col;
 
-    //we change the number nb_rows if new col have more
+    // we change the number nb_rows if new col have more
     // rows than the actual one with the more rows
     if (cdf -> columns[cdf -> nb_col - 1] -> log_size > cdf -> nb_rows) {
         cdf -> nb_rows = cdf -> columns[cdf -> nb_col - 1] -> log_size;
@@ -76,7 +103,9 @@ int add_col(CDATAFRAME *cdf, COLUMN *col) {
     return 1;
 }
 
+// Delete a column at the index given
 int del_col(CDATAFRAME *cdf, int index) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return 0;
@@ -94,7 +123,41 @@ int del_col(CDATAFRAME *cdf, int index) {
     return 1;
 }
 
+// Add a given row to the cdf
+int add_row(CDATAFRAME  *cdf, int *row) {
+    //check if cdf is empty or deleted
+    int check_editable = is_editable(cdf);
+    if (!check_editable) {
+        return 0;
+    }
+
+    // for each column, we insert the value at the right pos in row array
+    for (int i = 0; i < cdf -> nb_col; i++) {
+        insert_value(cdf -> columns[i], row[i]);
+    }
+    cdf -> nb_rows += 1;
+    return 1;
+}
+
+// Remove a row at the index given
+int del_row(CDATAFRAME *cdf, int index) {
+    //check if cdf is empty or deleted
+    int check_editable = is_editable(cdf);
+    if (!check_editable) {
+        return 0;
+    }
+
+    //for each column, we move all value one index higher
+    for (int i = 0; i < cdf -> nb_col; i++) {
+        remove_value(cdf -> columns[i], index);
+    }
+    cdf -> nb_rows -= 1;
+    return 1;
+}
+
+// rename the column at the index given
 void rename_col(CDATAFRAME *cdf, int index, char *title) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
@@ -105,6 +168,7 @@ void rename_col(CDATAFRAME *cdf, int index, char *title) {
 
 // print all columns from the cdataframe
 void print_cdataframe(CDATAFRAME *cdf) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
@@ -121,19 +185,24 @@ void print_cdataframe(CDATAFRAME *cdf) {
     }
 }
 
+// Print name of all column
 void print_col_name(CDATAFRAME *cdf) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
     }
 
+    //print each column name
     for (int i = 0; i < cdf -> nb_col; i++) {
         printf("%s  ", cdf -> columns[i] -> title);
     }
     printf("\n");
 }
 
+// Print all rows between x and y (included)
 void print_only_rows(CDATAFRAME *cdf, int x, int y) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
@@ -150,7 +219,9 @@ void print_only_rows(CDATAFRAME *cdf, int x, int y) {
     }
 }
 
+// print all col between x and y (included)
 void print_only_col(CDATAFRAME *cdf, int x, int y) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
@@ -167,7 +238,9 @@ void print_only_col(CDATAFRAME *cdf, int x, int y) {
     }
 }
 
+// Print number of row in the cdf
 void print_nb_rows(CDATAFRAME *cdf) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
@@ -176,7 +249,9 @@ void print_nb_rows(CDATAFRAME *cdf) {
     printf("NB Rows = %d\n", cdf -> nb_rows);
 }
 
+// Print number of column in the cdf
 void print_nb_col(CDATAFRAME *cdf) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
@@ -185,7 +260,9 @@ void print_nb_col(CDATAFRAME *cdf) {
     printf("NB Columns = %d\n", cdf -> nb_col);
 }
 
+// Check if a value is in the cdf
 int is_value_in(CDATAFRAME *cdf, int val) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return -1;
@@ -193,6 +270,9 @@ int is_value_in(CDATAFRAME *cdf, int val) {
 
     int found = 0;
     int index = 0;
+    // search in all column if the value is there
+    // and stop when it founds the value in one of the column
+    // or stop when searched through all column
     while (!found && index < cdf -> nb_col) {
         int check_occurrences = get_occurrence_col(cdf -> columns[index], val);
         if (check_occurrences > 0) {
@@ -203,22 +283,31 @@ int is_value_in(CDATAFRAME *cdf, int val) {
     return found;
 }
 
+// Edit the value at the pos (x, y) in the cdf
 void edit_value(CDATAFRAME *cdf, int val, int x, int y) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return;
     }
 
+    //check if x and y coord are in the table range
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     cdf -> columns[x] -> data[y] = val;
 }
 
+// Return number of value greater than val in the cdf
 int get_nb_greater_cdf(CDATAFRAME  *cdf, int val) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return 0;
     }
 
     int nb_greater = 0;
+    // check number of value greater than val in each column in cdf
+    // and add them to nb_greater
     for (int i = 0; i < cdf -> nb_col; i++) {
         int col_greater = get_nb_greater_col(cdf -> columns[i], val);
         nb_greater += col_greater;
@@ -226,13 +315,17 @@ int get_nb_greater_cdf(CDATAFRAME  *cdf, int val) {
     return nb_greater;
 }
 
+// Return number of value lower than val in the cdf
 int get_nb_lower_cdf(CDATAFRAME  *cdf, int val) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return 0;
     }
 
     int nb_lower = 0;
+    // check number of value lower than val in each column in cdf
+    // and add them to nb_lower
     for (int i = 0; i < cdf -> nb_col; i++) {
         int col_lower = get_nb_lower_col(cdf -> columns[i], val);
         nb_lower += col_lower;
@@ -240,13 +333,17 @@ int get_nb_lower_cdf(CDATAFRAME  *cdf, int val) {
     return nb_lower;
 }
 
+// Return number of occurrence of val in the cdf
 int get_occurrence_cdf(CDATAFRAME  *cdf, int val) {
+    //check if cdf is empty or deleted
     int check_editable = is_editable(cdf);
     if (!check_editable) {
         return 0;
     }
 
     int nb_occ = 0;
+    // check occurrence of val in each column in cdf
+    // and add them to nb_occ
     for (int i = 0; i < cdf -> nb_col; i++) {
         int col_occ = get_occurrence_col(cdf -> columns[i], val);
         nb_occ += col_occ;
