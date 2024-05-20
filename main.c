@@ -207,6 +207,7 @@ void hard_mode(CDATAFRAME *cdf, int nb_col, int nb_row) {
     }
 }
 
+
 int main() {
     CDATAFRAME *cdf = create_cdataframe();
     int nb_col, nb_row;
