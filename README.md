@@ -17,3 +17,7 @@ La différence étant ici le fait qu'il soit implémenté via le langage C.
 ## Comment l'utiliser ?
 
 Vous pouvez lancer main.exe dans un terminal et il y aura un menu avec toute les actions que vous pouvez effectuer
+
+## Projet réalisé par
+- Matthéo BURLION
+- Enzo CARREIRAS
